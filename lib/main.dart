@@ -9,6 +9,7 @@ import 'package:read_manga_bloc/presentation/blocs/detail/manga_detail_bloc.dart
 import 'package:read_manga_bloc/presentation/blocs/manga/manga_bloc.dart';
 import 'package:read_manga_bloc/presentation/blocs/read_manga/read_manga_bloc.dart';
 import 'package:read_manga_bloc/presentation/blocs/recommend/manga_recommend_bloc.dart';
+import 'package:read_manga_bloc/presentation/blocs/search/search_manga_bloc.dart';
 import 'package:read_manga_bloc/presentation/home_page.dart';
 import 'package:read_manga_bloc/injection.dart' as di;
 import 'package:read_manga_bloc/presentation/pages/manga_detail_page.dart';
@@ -16,6 +17,7 @@ import 'package:read_manga_bloc/presentation/pages/manga_list_page.dart';
 import 'package:read_manga_bloc/presentation/pages/manga_recommended_page.dart';
 import 'package:read_manga_bloc/presentation/pages/read_list_manga_page.dart';
 import 'package:read_manga_bloc/presentation/pages/read_manga_page.dart';
+import 'package:read_manga_bloc/presentation/pages/search_page.dart';
 
 void main() {
   di.init();
@@ -41,6 +43,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.locator<MangaRecommendBloc>(),
         ),
+        BlocProvider(
+          create: (_) => di.locator<SearchMangaBloc>(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -62,6 +67,10 @@ class MyApp extends StatelessWidget {
             case listMangaRecommendRoute:
               return MaterialPageRoute(
                 builder: (_) => const MangaRecommendedPage(),
+              );
+            case searchManga:
+              return MaterialPageRoute(
+                builder: (_) => const SearchMangaPage(),
               );
             case detailMangaRoute:
               final id = settings.arguments as String;

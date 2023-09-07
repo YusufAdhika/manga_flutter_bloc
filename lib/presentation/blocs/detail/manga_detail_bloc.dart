@@ -10,19 +10,17 @@ class MangaDetailBloc extends Bloc<MangaDetailEvent, MangaDetailState> {
   final GetMangaDetail _mangaDetail;
 
   MangaDetailBloc(this._mangaDetail) : super(MangaDetailEmpty()) {
-    on<FetchDetailManga>(
-      (event, emit) async {
-        emit(MangaDetailLoading());
+    on<FetchDetailManga>((event, emit) async {
+      emit(MangaDetailLoading());
 
-        final id = event.id;
+      final id = event.id;
 
-        final result = await _mangaDetail.execute(id);
+      final result = await _mangaDetail.execute(id);
 
-        result.fold(
-          (failure) => emit(MangaDetailError(failure.message)),
-          (data) => emit(MangaDetailHasData(data)),
-        );
-      },
-    );
+      result.fold(
+        (failure) => emit(MangaDetailError(failure.message)),
+        (data) => emit(MangaDetailHasData(data)),
+      );
+    });
   }
 }

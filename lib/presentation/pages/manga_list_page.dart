@@ -29,7 +29,7 @@ class _MangaListPageState extends State<MangaListPage> {
           actions: [
             IconButton(
               onPressed: () {
-                // Navigator.pushNamed(context, searchManga);
+                Navigator.pushNamed(context, searchManga);
               },
               icon: const Icon(Icons.search),
             )

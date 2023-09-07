@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:read_manga_bloc/common/constants.dart';
@@ -141,8 +142,21 @@ class DetailContent extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(manga.thumb),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16)),
+                        child: CachedNetworkImage(
+                          imageUrl: manga.thumb.toString(),
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          errorWidget: (context, url, error) => AspectRatio(
+                            aspectRatio: 1 / 1,
+                            child: Image.asset(
+                              "assets/placeholder.png",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),

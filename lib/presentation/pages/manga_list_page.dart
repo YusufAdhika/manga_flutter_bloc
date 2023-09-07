@@ -80,7 +80,13 @@ class _MangaListPageState extends State<MangaListPage> {
                                 child: CircularProgressIndicator(),
                               ),
                               errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
+                                          AspectRatio(
+                                        aspectRatio: 1 / 0.5,
+                                        child: Image.asset(
+                                          "assets/placeholder.png",
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                             ),
                           ),
                           Padding(

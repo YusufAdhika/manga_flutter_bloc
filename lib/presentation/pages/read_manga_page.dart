@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:read_manga_bloc/common/constants.dart';
 import 'package:read_manga_bloc/presentation/blocs/read_manga/read_manga_bloc.dart';
 
@@ -55,7 +54,7 @@ class _ReadMangaPageState extends State<ReadMangaPage> {
                                     child: CircularProgressIndicator(),
                                   ),
                                   errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
+                                      Container(),
                                 ),
                               ),
                             );

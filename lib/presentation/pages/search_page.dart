@@ -82,16 +82,28 @@ class _SearchMangaPageState extends State<SearchMangaPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(16)),
-                                  child: CachedNetworkImage(
-                                    imageUrl: manga.thumb.toString(),
-                                    placeholder: (context, url) => const Center(
-                                      child: CircularProgressIndicator(),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(16)),
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(16)),
+                                    child: CachedNetworkImage(
+                                      imageUrl: manga.endpoint.toString(),
+                                      placeholder: (context, url) =>
+                                          const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          AspectRatio(
+                                        aspectRatio: 1 / 0.5,
+                                        child: Image.asset(
+                                          "assets/placeholder.png",
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
                                   ),
                                 ),
                                 Padding(

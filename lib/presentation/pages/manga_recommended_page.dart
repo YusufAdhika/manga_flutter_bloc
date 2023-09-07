@@ -68,7 +68,7 @@ class _MangaRecommendedPageState extends State<MangaRecommendedPage> {
                                     child: CircularProgressIndicator(),
                                   ),
                                   errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
+                                      Image.asset("assets/placeholder.png"),
                                 ),
                               ),
                               Padding(

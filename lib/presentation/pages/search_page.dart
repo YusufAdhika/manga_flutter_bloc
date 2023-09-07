@@ -90,7 +90,7 @@ class _SearchMangaPageState extends State<SearchMangaPage> {
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(16)),
                                     child: CachedNetworkImage(
-                                      imageUrl: manga.endpoint.toString(),
+                                      imageUrl: manga.thumb.toString(),
                                       placeholder: (context, url) =>
                                           const Center(
                                         child: CircularProgressIndicator(),

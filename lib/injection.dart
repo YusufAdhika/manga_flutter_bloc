@@ -30,21 +30,25 @@ import 'package:read_manga_bloc/data/repositories/manga_repository_impl.dart';
 import 'package:read_manga_bloc/domain/repositories/manga_repository.dart';
 import 'package:read_manga_bloc/domain/usecases/get_manga.dart';
 import 'package:read_manga_bloc/domain/usecases/get_manga_detail.dart';
+import 'package:read_manga_bloc/domain/usecases/get_manga_recommended.dart';
 import 'package:read_manga_bloc/domain/usecases/get_read_manga.dart';
 import 'package:read_manga_bloc/presentation/blocs/detail/manga_detail_bloc.dart';
 import 'package:read_manga_bloc/presentation/blocs/manga/manga_bloc.dart';
 import 'package:read_manga_bloc/presentation/blocs/read_manga/read_manga_bloc.dart';
+import 'package:read_manga_bloc/presentation/blocs/recommend/manga_recommend_bloc.dart';
 
 final locator = GetIt.instance;
 
 void init() {
   // bloc
   locator.registerFactory(() => MangaBloc(locator()));
+  locator.registerFactory(() => MangaRecommendBloc(locator()));
   locator.registerFactory(() => MangaDetailBloc(locator()));
   locator.registerFactory(() => ReadMangaBloc(locator()));
 
   // usecase
   locator.registerLazySingleton(() => GetListManga(locator()));
+  locator.registerLazySingleton(() => GetMangaRecommend(locator()));
   locator.registerLazySingleton(() => GetMangaDetail(locator()));
   locator.registerLazySingleton(() => GetReadManga(locator()));
 

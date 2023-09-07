@@ -26,6 +26,14 @@ class _MangaListPageState extends State<MangaListPage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Read Manga'),
+          actions: [
+            IconButton(
+              onPressed: () {
+                // Navigator.pushNamed(context, searchManga);
+              },
+              icon: const Icon(Icons.search),
+            )
+          ],
         ),
         body: BlocBuilder<MangaBloc, MangaState>(
           builder: (_, state) {

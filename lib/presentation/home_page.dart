@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:read_manga_bloc/presentation/pages/bookmark_manga_page.dart';
+import 'package:read_manga_bloc/presentation/pages/info_page.dart';
 import 'package:read_manga_bloc/presentation/pages/manga_list_page.dart';
 import 'package:read_manga_bloc/presentation/pages/manga_recommended_page.dart';
 
@@ -34,8 +36,8 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _listWidget = [
     const MangaListPage(),
     const MangaRecommendedPage(),
-    // const BookmarkPage(),
-    // const InfoPage(),
+    const BookmarkPage(),
+    const InfoPage(),
   ];
 
   void _onBottomNavTapped(int index) {

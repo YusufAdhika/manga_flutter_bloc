@@ -15,3 +15,30 @@ class FetchDetailManga extends MangaDetailEvent {
   @override
   List<Object?> get props => [id];
 }
+
+class AddBookmarkManga extends MangaDetailEvent {
+  final MangaDetail mangaDetail;
+
+  const AddBookmarkManga(this.mangaDetail);
+
+  @override
+  List<Object?> get props => [mangaDetail];
+}
+
+class RemoveFromBookmarkManga extends MangaDetailEvent {
+  final MangaDetail mangaDetail;
+
+  const RemoveFromBookmarkManga(this.mangaDetail);
+
+  @override
+  List<Object?> get props => [mangaDetail];
+}
+
+class LoadBookmarkStatusManga extends MangaDetailEvent {
+  final String endpoint;
+
+  const LoadBookmarkStatusManga(this.endpoint);
+
+  @override
+  List<Object?> get props => [endpoint];
+}

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:read_manga_bloc/common/constants.dart';
 import 'package:read_manga_bloc/common/routes.dart';
+import 'package:read_manga_bloc/common/state_enum.dart';
 import 'package:read_manga_bloc/domain/entities/manga_detail.dart';
 import 'package:read_manga_bloc/presentation/blocs/detail/manga_detail_bloc.dart';
 
@@ -18,31 +19,63 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-      () => context.read<MangaDetailBloc>().add(FetchDetailManga(widget.id)),
-    );
+    Future.microtask(() {
+      context.read<MangaDetailBloc>().add(FetchDetailManga(widget.id));
+      context.read<MangaDetailBloc>().add(LoadBookmarkStatusManga(widget.id));
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: BlocBuilder<MangaDetailBloc, MangaDetailState>(
-      builder: (_, state) {
-        if (state is MangaDetailLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is MangaDetailHasData) {
-          return SafeArea(
-            child: DetailContent(
-              state.result,
-              false,
-            ),
-          );
-        } else {
-          return const Text("Failed");
-        }
-      },
-    ));
+    return Scaffold(
+      body: BlocConsumer<MangaDetailBloc, MangaDetailState>(
+        listener: (context, state) {
+          final message = state.bookmarkMessage;
+          if (message == MangaDetailBloc.watchlistAddSuccessMessage ||
+              message == MangaDetailBloc.watchlistRemoveSuccessMessage) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (_) {
+                return AlertDialog(
+                  content: Text(message),
+                );
+              },
+            );
+          }
+        },
+        listenWhen: (oldState, newState) {
+          return oldState.bookmarkMessage != newState.bookmarkMessage &&
+              newState.bookmarkMessage != '';
+        },
+        builder: (_, state) {
+          final detailState = state.mangaDetailState;
+          if (detailState == RequestState.loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (detailState == RequestState.loaded) {
+            return SafeArea(
+              child: DetailContent(
+                state.mangaDetail!,
+                state.isAddedToBookmark,
+              ),
+            );
+          } else if (detailState == RequestState.error) {
+            return Center(
+              child: Text(state.message),
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+    );
   }
 }
 
@@ -88,37 +121,15 @@ class DetailContent extends StatelessWidget {
                         color: isAddedBookmark ? Colors.black : Colors.white,
                       ),
                       onPressed: () async {
-                        // if (!isAddedBookmark) {
-                        //   await Provider.of<MangaDetailNotifier>(context,
-                        //           listen: false)
-                        //       .addBookmark(manga);
-                        // } else {
-                        //   await Provider.of<MangaDetailNotifier>(context,
-                        //           listen: false)
-                        //       .removedBookmark(manga);
-                        // }
-
-                        // final message = Provider.of<MangaDetailNotifier>(
-                        //         context,
-                        //         listen: false)
-                        //     .bookmarkMessage;
-
-                        // if (message ==
-                        //         MangaDetailNotifier.bookmarkAddSuccessMessage ||
-                        //     message ==
-                        //         MangaDetailNotifier
-                        //             .bookmarkRemoveSuccessMessage) {
-                        //   ScaffoldMessenger.of(context)
-                        //       .showSnackBar(SnackBar(content: Text(message)));
-                        // } else {
-                        //   showDialog(
-                        //       context: context,
-                        //       builder: (context) {
-                        //         return AlertDialog(
-                        //           content: Text(message),
-                        //         );
-                        //       });
-                        // }
+                        if (!isAddedBookmark) {
+                          context
+                              .read<MangaDetailBloc>()
+                              .add(AddBookmarkManga(manga));
+                        } else {
+                          context
+                              .read<MangaDetailBloc>()
+                              .add(RemoveFromBookmarkManga(manga));
+                        }
                       },
                     ),
                   ),
@@ -129,34 +140,24 @@ class DetailContent extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Center(
-              child: InkWell(
-                onTap: () {},
-                borderRadius: BorderRadius.circular(12),
-                child: Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.grey[600],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(16)),
-                        child: CachedNetworkImage(
-                          imageUrl: manga.thumb.toString(),
-                          placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          errorWidget: (context, url, error) => AspectRatio(
-                            aspectRatio: 1 / 1,
-                            child: Image.asset(
-                              "assets/placeholder.png",
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+              child: Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.grey[600],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                      child: CachedNetworkImage(
+                        imageUrl: manga.thumb.toString(),
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
                         ),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
                     ),
                   ),
@@ -299,37 +300,6 @@ class DetailContent extends StatelessWidget {
             ),
           )
         ],
-      ),
-    );
-  }
-}
-
-class BookmarkButton extends StatelessWidget {
-  const BookmarkButton({
-    Key? key,
-    required this.isAddedBookmark,
-    required this.manga,
-  }) : super(key: key);
-
-  final bool isAddedBookmark;
-  final MangaDetail manga;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () async {},
-      child: Container(
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.blue, // Customize the button color as needed
-        ),
-        padding: const EdgeInsets.all(12), // Adjust the padding as needed
-        child: Center(
-          child: Icon(
-            isAddedBookmark ? Icons.check : Icons.add,
-            color: Colors.white, // Customize the icon color as needed
-          ),
-        ),
       ),
     );
   }

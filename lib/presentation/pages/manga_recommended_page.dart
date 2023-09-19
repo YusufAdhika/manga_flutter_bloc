@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:read_manga_bloc/common/constants.dart';
 import 'package:read_manga_bloc/presentation/blocs/recommend/manga_recommend_bloc.dart';
 import '../../common/routes.dart';

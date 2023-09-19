@@ -1,26 +1,3 @@
-// import 'package:get_it/get_it.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:read_manga_bloc/data/data_sources/db/database_helper.dart';
-// import 'package:read_manga_bloc/data/data_sources/manga_local_data_source.dart';
-// import 'package:read_manga_bloc/data/repositories/manga_repository_impl.dart';
-// import 'package:read_manga_bloc/data/data_sources/manga_remote_data_source.dart';
-// import 'package:read_manga_bloc/domain/repositories/manga_repository.dart';
-// import 'package:read_manga_bloc/domain/usecases/get_bookmark_manga.dart';
-// import 'package:read_manga_bloc/domain/usecases/get_bookmark_status.dart';
-// import 'package:read_manga_bloc/domain/usecases/get_manga.dart';
-// import 'package:read_manga_bloc/domain/usecases/get_manga_detail.dart';
-// import 'package:read_manga_bloc/domain/usecases/get_manga_recommended.dart';
-// import 'package:read_manga_bloc/domain/usecases/get_read_manga.dart';
-// import 'package:read_manga_bloc/domain/usecases/get_search.dart';
-// import 'package:read_manga_bloc/domain/usecases/remove_bookmark.dart';
-// import 'package:read_manga_bloc/domain/usecases/save_bookmark.dart';
-// import 'package:read_manga_bloc/presentation/blocs/read_manga/read_manga_notifier.dart';
-// import 'package:read_manga_bloc/presentation/blocs/bookmark/bookmark_manga_notifier.dart';
-// import 'package:read_manga_bloc/presentation/blocs/detail/manga_detail_notifier.dart';
-// import 'package:read_manga_bloc/presentation/blocs/manga/manga_list_notifier.dart';
-// import 'package:read_manga_bloc/presentation/blocs/recommend/manga_list_recommended_nofier.dart';
-// import 'package:read_manga_bloc/presentation/blocs/search/search_notifier.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 import 'package:read_manga_bloc/data/data_sources/db/database_helper.dart';
@@ -28,11 +5,16 @@ import 'package:read_manga_bloc/data/data_sources/manga_local_data_source.dart';
 import 'package:read_manga_bloc/data/data_sources/manga_remote_data_source.dart';
 import 'package:read_manga_bloc/data/repositories/manga_repository_impl.dart';
 import 'package:read_manga_bloc/domain/repositories/manga_repository.dart';
+import 'package:read_manga_bloc/domain/usecases/get_bookmark_manga.dart';
+import 'package:read_manga_bloc/domain/usecases/get_bookmark_status.dart';
 import 'package:read_manga_bloc/domain/usecases/get_manga.dart';
 import 'package:read_manga_bloc/domain/usecases/get_manga_detail.dart';
 import 'package:read_manga_bloc/domain/usecases/get_manga_recommended.dart';
 import 'package:read_manga_bloc/domain/usecases/get_read_manga.dart';
 import 'package:read_manga_bloc/domain/usecases/get_search.dart';
+import 'package:read_manga_bloc/domain/usecases/remove_bookmark.dart';
+import 'package:read_manga_bloc/domain/usecases/save_bookmark.dart';
+import 'package:read_manga_bloc/presentation/blocs/bookmark/bookmark_manga_bloc.dart';
 import 'package:read_manga_bloc/presentation/blocs/detail/manga_detail_bloc.dart';
 import 'package:read_manga_bloc/presentation/blocs/manga/manga_bloc.dart';
 import 'package:read_manga_bloc/presentation/blocs/read_manga/read_manga_bloc.dart';
@@ -45,9 +27,17 @@ void init() {
   // bloc
   locator.registerFactory(() => MangaBloc(locator()));
   locator.registerFactory(() => MangaRecommendBloc(locator()));
-  locator.registerFactory(() => MangaDetailBloc(locator()));
+  locator.registerFactory(
+    () => MangaDetailBloc(
+      mangaDetail: locator(),
+      removeBookmark: locator(),
+      saveBookmark: locator(),
+      getBookmarkListStatus: locator(),
+    ),
+  );
   locator.registerFactory(() => ReadMangaBloc(locator()));
   locator.registerFactory(() => SearchMangaBloc(locator()));
+  locator.registerFactory(() => BookmarkMangaBloc(locator()));
 
   // usecase
   locator.registerLazySingleton(() => GetListManga(locator()));
@@ -55,6 +45,11 @@ void init() {
   locator.registerLazySingleton(() => GetMangaDetail(locator()));
   locator.registerLazySingleton(() => GetReadManga(locator()));
   locator.registerLazySingleton(() => GetSearch(locator()));
+
+  locator.registerLazySingleton(() => GetBookmarklistManga(locator()));
+  locator.registerLazySingleton(() => SaveBookmark(locator()));
+  locator.registerLazySingleton(() => RemoveBookmark(locator()));
+  locator.registerLazySingleton(() => GetBookmarkListStatus(locator()));
 
   // repository
   locator.registerLazySingleton<MangaRepository>(

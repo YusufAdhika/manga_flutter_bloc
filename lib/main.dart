@@ -5,6 +5,7 @@ import 'package:read_manga_bloc/common/constants.dart';
 import 'package:read_manga_bloc/common/routes.dart';
 import 'package:read_manga_bloc/common/utils.dart';
 import 'package:read_manga_bloc/domain/entities/manga_detail.dart';
+import 'package:read_manga_bloc/presentation/blocs/bookmark/bookmark_manga_bloc.dart';
 import 'package:read_manga_bloc/presentation/blocs/detail/manga_detail_bloc.dart';
 import 'package:read_manga_bloc/presentation/blocs/manga/manga_bloc.dart';
 import 'package:read_manga_bloc/presentation/blocs/read_manga/read_manga_bloc.dart';
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => di.locator<SearchMangaBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<BookmarkMangaBloc>(),
         ),
       ],
       child: MaterialApp(

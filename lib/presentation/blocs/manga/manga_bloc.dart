@@ -23,8 +23,6 @@ class MangaBloc extends Bloc<MangaEvent, MangaState> {
 
     on<FetchNextManga>((event, emit) async {
       currentPageNumber++;
-      emit(MangaLoading());
-
       final result = await _getListManga.execute(currentPageNumber);
 
       result.fold(

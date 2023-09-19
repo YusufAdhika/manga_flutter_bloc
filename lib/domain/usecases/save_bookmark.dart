@@ -8,7 +8,7 @@ class SaveBookmark {
 
   SaveBookmark(this.repository);
 
-  Future<Either<Failure, String>> execute(MangaDetail movie) {
-    return repository.saveBookmark(movie);
+  Future<Either<Failure, String>> execute(MangaDetail manga) {
+    return repository.saveBookmark(manga);
   }
 }

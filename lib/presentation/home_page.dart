@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final scrollController = ScrollController();
   int _bottomNavIndex = 0;
 
   final List<BottomNavigationBarItem> _bottomNavBarItems = const [
@@ -33,23 +34,25 @@ class _HomePageState extends State<HomePage> {
     ),
   ];
 
-  final List<Widget> _listWidget = [
-    const MangaListPage(),
-    const MangaRecommendedPage(),
-    const BookmarkPage(),
-    const InfoPage(),
-  ];
-
   void _onBottomNavTapped(int index) {
     setState(() {
       _bottomNavIndex = index;
+      _bottomNavIndex == 0 ? _scrollListener() : null;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> listWidget = [
+      MangaListPage(
+        scrollController: scrollController,
+      ),
+      const MangaRecommendedPage(),
+      const BookmarkPage(),
+      const InfoPage(),
+    ];
     return Scaffold(
-      body: _listWidget[_bottomNavIndex],
+      body: listWidget[_bottomNavIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _bottomNavIndex,
         showUnselectedLabels: true,
@@ -58,6 +61,14 @@ class _HomePageState extends State<HomePage> {
         items: _bottomNavBarItems,
         onTap: _onBottomNavTapped,
       ),
+    );
+  }
+
+  void _scrollListener() {
+    scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
     );
   }
 }

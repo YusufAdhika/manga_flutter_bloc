@@ -21,8 +21,8 @@ abstract class MangaRemoteDataSource {
 }
 
 class MangaRemoteDataSourceImpl implements MangaRemoteDataSource {
-  // static const url = 'http://10.0.2.2:3000/api'; // Android Device
-  static const url = 'http://localhost:3000/api'; // iOS device
+  static const url = 'http://10.0.2.2:3000/api'; // Android Device
+  // static const url = 'http://localhost:3000/api'; // iOS device
 
   final http.Client client;
 

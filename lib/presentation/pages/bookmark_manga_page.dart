@@ -81,8 +81,9 @@ class _BookmarkPageState extends State<BookmarkPage> with RouteAware {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 18),
                               child: Text(
-                                "manga.title",
+                                manga.title,
                                 style: kSubtitle,
+                                maxLines: 2,
                                 textAlign:
                                     TextAlign.center, // Center-align the text
                               ),

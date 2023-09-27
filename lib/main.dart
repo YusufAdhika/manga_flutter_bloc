@@ -65,8 +65,11 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case listMangaRoute:
+              final scroll = settings.arguments as ScrollController;
               return MaterialPageRoute(
-                builder: (_) => const MangaListPage(),
+                builder: (_) => MangaListPage(
+                  scrollController: scroll,
+                ),
               );
             case listMangaRecommendRoute:
               return MaterialPageRoute(
